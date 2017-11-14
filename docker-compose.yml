@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  dnsmasq:
+    build: ./dnsmasq/
+    ports:
+      - "53"
+      - "53/udp"
+    cap_add:
+      - NET_ADMIN
+    network_mode: "host"
+    environment:
+      - DHCP_RANGE=
+      - TFTP_IP_ADDR
+    command: /bin/sh -c "envsubst '$$DHCP_RANGE$TFTP_IP_ADDR' < /etc/dnsmasq.conf.template > /etc/dnsmasq.conf && dnsmasq -k"
+
+  nginx:
+    build: ./nginx/
+    ports:
+      - "80"

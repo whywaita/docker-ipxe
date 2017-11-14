@@ -1,0 +1,39 @@
+#!ipxe
+echo
+echo attempting to netboot with IP ${ip}
+echo
+menu install menu
+item ubuntu1404 Ubuntu trusty installation
+item ubuntu1604 Ubuntu xenial installation
+item centos7 Centos7 installation
+item debian8 Debian jessie installation
+item --gap
+item back install menu
+choose --timeout 60000 --default back target && goto ${target} || goto menu
+
+:ubuntu1404
+set ubuntu1404 http://ftp.riken.go.jp/Linux/ubuntu/dists/trusty/main/installer-amd64/current/images/netboot/ubuntu-installer/amd64
+initrd ${ubuntu1404}/initrd.gz
+kernel ${ubuntu1404}/linux tasks=standard vga=788 -- quiet
+boot
+
+:ubuntu1604
+set ubuntu1604 http://ftp.riken.go.jp/Linux/ubuntu/dists/xenial/main/installer-amd64/current/images/netboot/ubuntu-installer/amd64
+initrd ${ubuntu1604}/initrd.gz
+kernel ${ubuntu1604}/linux tasks=standard vga=788 -- quiet
+boot
+
+:centos7
+set centos7 http://ftp.jaist.ac.jp/pub/Linux/CentOS/7/os/x86_64
+initrd ${centos7}/image/pxeboot/initrd.img
+kernel ${centos7}/image/pxeboot/vmlinuz vga=788 repo=${centos7}
+boot
+
+:debian8
+set debian8 http://ftp.jaist.ac.jp/pub/Linux/debian/dists/jessie/main/installer-amd64/current/images/netboot/debian-installer/amd64
+initrd ${debian8}/initrd.gz
+kernel ${debian8}/linux tasks=standard vga=788 -- quiet
+boot
+
+:back
+exit

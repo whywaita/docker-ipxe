@@ -1,0 +1,13 @@
+# use DHCP-Proxy
+dhcp-range=${DHCP_RANGE},proxy
+
+dhcp-match=set:ipxe,175 # gPXE/iPXE sends a 175 option.
+dhcp-boot=tag:!ipxe,undionly.kpxe
+
+# filename of iPXE menu, server name, server ip addr
+dhcp-boot=http://${TFTP_IP_ADDR}/boot.ipxe,${TFTP_IP_ADDR},${TFTP_IP_ADDR}
+pxe-service=tag:!ipxe,x86PC,"splash",undionly.kpxe
+
+enable-tftp
+tftp-root=/srv/tftp/
+log-queries
